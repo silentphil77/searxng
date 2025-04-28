@@ -1,0 +1,85 @@
+=======================================
+SEARXNG DOCKER SETUP - FILE EXPLANATIONS
+=======================================
+
+This document explains what each file in the SearXNG Docker setup does.
+
+1. docker-compose.yml
+-------------------
+PURPOSE: The main configuration file for Docker that defines all the services.
+WHAT IT DOES: Specifies three services (searxng, redis, meilisearch) and how they connect to each other.
+WHY IT'S NEEDED: Allows Docker to create and run all the necessary containers.
+
+2. Dockerfile
+----------
+PURPOSE: Instructions to build the custom SearXNG container.
+WHAT IT DOES: Starts with the official SearXNG image and adds rate limiting and custom styling.
+WHY IT'S NEEDED: Customizes the standard SearXNG container with your specific features.
+
+3. setup.sh
+---------
+PURPOSE: Installation script to automate deployment.
+WHAT IT DOES: 
+  - Checks if Docker is installed
+  - Creates a .env file with default settings if it doesn't exist
+  - Generates a secure random key
+  - Builds and starts the containers
+WHY IT'S NEEDED: Makes installation easy, especially for non-developers.
+
+4. entrypoint.sh
+-------------
+PURPOSE: Startup script that runs when the container starts.
+WHAT IT DOES: Dynamically configures rate limiting based on environment variables.
+WHY IT'S NEEDED: Adapts to different deployment environments (especially Coolify).
+
+5. limiter.toml.template
+---------------------
+PURPOSE: Template for rate limiting configuration.
+WHAT IT DOES: Defines how many requests are allowed per minute, hour, and day.
+WHY IT'S NEEDED: Protects your SearXNG instance from abuse or overload.
+
+6. settings.yml
+------------
+PURPOSE: Configuration file for SearXNG itself.
+WHAT IT DOES: Enables custom CSS support.
+WHY IT'S NEEDED: Allows customization of the SearXNG interface.
+
+7. custom.css
+----------
+PURPOSE: Custom styling for the SearXNG interface.
+WHAT IT DOES: Hides the footer and can be edited to change other visual elements.
+WHY IT'S NEEDED: Allows you to personalize the appearance of SearXNG.
+
+8. .env.example
+------------
+PURPOSE: Example environment variable file.
+WHAT IT DOES: Shows which environment variables can be set.
+WHY IT'S NEEDED: Provides a template for users to create their own .env file.
+
+9. README.md
+---------
+PURPOSE: Main documentation file.
+WHAT IT DOES: Explains how to deploy and use the SearXNG setup.
+WHY IT'S NEEDED: Helps users understand how to use the project.
+
+10. GenerateHex/app.py
+------------------
+PURPOSE: Utility to generate secure random keys.
+WHAT IT DOES: Creates a cryptographically secure random string.
+WHY IT'S NEEDED: Provides secure keys for SearXNG configuration.
+
+=======================================
+DEPLOYMENT INSTRUCTIONS
+=======================================
+
+TO DEPLOY WITH COOLIFY:
+1. Push all files to a GitHub repository
+2. In Coolify, create a new application using Docker Compose
+3. Connect to your GitHub repository
+4. Set the required environment variables
+5. Deploy
+
+TO DEPLOY WITH REGULAR DOCKER:
+1. Make sure Docker and Docker Compose are installed
+2. Run the setup script: ./setup.sh
+3. Access SearXNG at http://localhost:8083 

@@ -1,0 +1,86 @@
+version: '3.8'
+services:
+  searxng:
+    build: .
+    image: searxng-custom
+    container_name: searxng
+    restart: always
+    ports:
+      - '8083:8080'
+    environment:
+      BASE_URL: '${BASE_URL}'
+      INSTANCE_NAME: '${INSTANCE_NAME}'
+      SEARXNG_REDIS_URL: '${SEARXNG_REDIS_URL}'
+      SEARXNG_MEILISEARCH_URL: '${SEARXNG_MEILISEARCH_URL}'
+      SEARX_SECRET_KEY: '${SEARX_SECRET_KEY}'
+    volumes:
+      - 'searxng-data:/etc/searxng'
+      - './custom.css:/usr/local/searxng/searx/static/themes/simple/css/custom.css'
+    depends_on:
+      - redis
+      - meilisearch
+    networks:
+      - searxng-network
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - |-
+          python3 - << 'EOF'
+          import urllib.request, socket
+          try:
+              socket.setdefaulttimeout(5)
+              urllib.request.urlopen('http://localhost:8080/')
+          except Exception:
+              exit(1)
+          EOF
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+  redis:
+    image: 'redis:alpine'
+    container_name: searxng-redis
+    restart: always
+    volumes:
+      - 'redis-data:/data'
+    command: 'redis-server --appendonly yes'
+    networks:
+      - searxng-network
+    healthcheck:
+      test:
+        - CMD
+        - redis-cli
+        - ping
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+  meilisearch:
+    image: 'getmeili/meilisearch:latest'
+    container_name: searxng-meilisearch
+    restart: always
+    ports:
+      - '7700:7700'
+    volumes:
+      - 'meilisearch-data:/meili_data'
+    environment:
+      MEILI_NO_ANALYTICS: 'true'
+      MEILI_DB_PATH: /meili_data
+    networks:
+      - searxng-network
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - '-f'
+        - 'http://localhost:7700/health'
+      interval: 30s
+      timeout: 5s
+      retries: 3
+volumes:
+  searxng-data: {  }
+  redis-data: {  }
+  meilisearch-data: {  }
+networks:
+  searxng-network:
+    driver: bridge

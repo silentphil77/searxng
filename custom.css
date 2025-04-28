@@ -1,0 +1,8 @@
+/* SearXNG Custom CSS */
+
+/* Hide footer */
+footer {
+    display: none !important;
+}
+
+/* Additional custom styles can be added below */ 

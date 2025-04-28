@@ -1,0 +1,6 @@
+ui:
+  static_use_hash: false
+  custom_css: true
+
+# Keep default settings for the rest of the configuration
+# SearXNG will merge this with its default configuration 

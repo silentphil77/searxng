@@ -1,6 +1,27 @@
-ui:
-  static_use_hash: false
-  custom_css: true
+general:
+  debug: false
+  instance_name: "${INSTANCE_NAME}"
+  base_url: "${BASE_URL}"
+  theme:
+    default: simple
+    custom_css_path: "/etc/searxng/custom.css"
 
-# Keep default settings for the rest of the configuration
-# SearXNG will merge this with its default configuration 
+search:
+  safe_search: 0
+  language: en
+  autocomplete: ""
+  default_lang: "en"
+
+server:
+  port: 8080
+  bind_address: "0.0.0.0"
+  secret_key: "${SEARX_SECRET_KEY}"
+
+redis:
+  url: "${SEARXNG_REDIS_URL}"
+
+search_engine:
+  url: "${SEARXNG_MEILISEARCH_URL}"
+
+ui:
+  static_path: "/usr/local/searxng/searx/static"

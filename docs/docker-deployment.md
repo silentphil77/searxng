@@ -33,11 +33,13 @@ Key settings to configure:
 
 | Variable | Description | Example Value |
 |----------|-------------|---------------|
-| `BASE_URL` | The public URL of your instance | `https://search.yourdomain.com/` |
+| `BASE_URL` | The public URL of your instance | `https://searxng.111122112.com/` |
 | `INSTANCE_NAME` | Name shown on your instance | `My SearXNG` |
 | `SEARXNG_REDIS_URL` | Redis connection string | `redis://searxng-redis:6379/0` |
 | `SEARXNG_MEILISEARCH_URL` | Meilisearch connection | `http://searxng-meilisearch:7700` |
 | `SEARX_SECRET_KEY` | Secret key for secure operations | Generated random hexadecimal string |
+
+**Network Configuration**: This setup is pre-configured to use IP `10.1.0.3` on port `8083` with hostname `searxng.111122112.com`. If you need to change this, modify the `ports` section in `docker-compose.yml`.
 
 ### 3. Generate a Secure Secret Key
 
@@ -57,7 +59,7 @@ docker-compose up -d
 
 ### 5. Access Your SearXNG Instance
 
-Navigate to `http://localhost:8083` in your web browser (or the configured BASE_URL if deployed to a server).
+Navigate to `http://10.1.0.3:8083` in your web browser (or use the hostname `searxng.111122112.com` if DNS is properly configured).
 
 ## Docker Compose Configuration Options
 
@@ -83,11 +85,11 @@ An alternative configuration is available with custom networking for better serv
 
 ## Port Configuration
 
-By default, SearXNG is accessible on port 8083. To change this, modify the `ports` section in `docker-compose.yml`:
+The SearXNG instance is preconfigured to run on IP `10.1.0.3` with port `8083`. If you need to change this configuration, modify the `ports` section in `docker-compose.yml`:
 
 ```yaml
 ports:
-  - 'your_port:8080'
+  - 'your_ip:your_port:8080'
 ```
 
 ## Maintenance Tasks

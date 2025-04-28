@@ -1,11 +1,21 @@
-#!/bin/bash
-set -e
+#!/bin/sh
 
-# Get the Redis URL from environment variable
-REDIS_URL=${SEARXNG_REDIS_URL:-"redis://searxng-redis:6379/0"}
+# Set hostname in environment if not already set
+if [ -z "$HOSTNAME" ]; then
+    export HOSTNAME="searxng.111122112.com"
+fi
 
-# Create limiter.toml from template
-sed "s|REDIS_URL_PLACEHOLDER|$REDIS_URL|g" /etc/searxng/limiter.toml.template > /etc/searxng/limiter.toml
+# Generate limiter.toml from template
+echo "Configuring rate limiter..."
+if [ -f /etc/searxng/limiter.toml.template ]; then
+    # Replace placeholder with actual Redis URL
+    sed "s|REDIS_URL_PLACEHOLDER|${SEARXNG_REDIS_URL}|g" /etc/searxng/limiter.toml.template > /etc/searxng/limiter.toml
+    echo "Rate limiter configured with Redis URL: ${SEARXNG_REDIS_URL}"
+else
+    echo "Warning: limiter.toml.template not found!"
+fi
 
-# Continue with the original command
+echo "Starting SearXNG on http://10.1.0.3:8083 (hostname: ${HOSTNAME})"
+
+# Execute the original entrypoint with all arguments
 exec "$@" 

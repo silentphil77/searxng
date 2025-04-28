@@ -5,4 +5,11 @@ footer {
     display: none !important;
 }
 
+/* Add hostname branding */
+.search_header .title::after {
+    content: " - searxng.111122112.com";
+    font-size: 0.7em;
+    opacity: 0.8;
+}
+
 /* Additional custom styles can be added below */ 

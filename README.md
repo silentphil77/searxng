@@ -47,13 +47,15 @@ The configuration is specifically optimized for deployment with [Coolify](https:
 
    | Variable | Description | Example Value |
    |----------|-------------|---------------|
-   | `BASE_URL` | The public URL of your instance | `https://search.yourdomain.com/` |
+   | `BASE_URL` | The public URL of your instance | `https://searxng.111122112.com/` |
    | `INSTANCE_NAME` | Name shown on your instance | `My SearXNG` |
    | `SEARXNG_REDIS_URL` | Redis connection string | `redis://searxng-redis:6379/0` |
    | `SEARXNG_MEILISEARCH_URL` | Meilisearch connection | `http://searxng-meilisearch:7700` |
    | `SEARX_SECRET_KEY` | Secret key for secure operations | Generated random hexadecimal string |
 
    **Important for Coolify Users**: The `SEARXNG_REDIS_URL` will be automatically used for rate limiting. Our setup adapts to Coolify's dynamic container naming, so you don't need to manually update the configuration after deployment.
+
+   **Note on Networking**: This configuration is specifically set up to use IP `10.1.0.3` on port `8083` with hostname `searxng.111122112.com`.
 
    ![Coolify Environment Variables](https://raw.githubusercontent.com/PhilParkerBrown/searxng/main/docs/coolify-env-vars.png)
 
@@ -196,7 +198,16 @@ volumes:
 
 ## Manual Docker Deployment
 
-For users who prefer manual deployment without Coolify, refer to our [Docker Deployment Guide](docs/docker-deployment.md).
+For users who prefer manual deployment without Coolify:
+
+1. Clone the repository
+2. Run the setup script:
+   ```bash
+   ./setup.sh
+   ```
+3. Access your SearXNG instance at `http://10.1.0.3:8083` or `https://searxng.111122112.com`
+
+For more detailed instructions, refer to our [Docker Deployment Guide](docs/docker-deployment.md).
 
 ## Project Structure
 
